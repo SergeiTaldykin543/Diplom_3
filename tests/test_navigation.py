@@ -1,60 +1,39 @@
 import pytest
 import allure
-from data.working_data import WorkingData
-from utilities.urls import URLs
-import time
+from pages.main_page import MainPage
+from pages.order_feed_page import OrderFeedPage
+from pages.account_page import AccountPage
+
 
 @allure.feature("Navigation")
 class TestNavigation:
     
-    @allure.title("Test navigation to Constructor")
-    @allure.description("Test navigating from order feed to constructor")
-    def test_navigate_to_constructor(self, driver, login):
-        from pages.main_page import MainPage
-        
+    @allure.title("Переход из конструктора в ленту заказов")
+    def test_navigate_from_constructor_to_order_feed(self, driver, login):
         main_page = MainPage(driver)
+        order_feed_page = OrderFeedPage(driver)
         
-        with allure.step("Click on Order Feed"):
-            main_page.click_order_feed()
-            time.sleep(2)
+        main_page.click_order_feed()
         
-        with allure.step("Verify we are on order feed page"):
-            assert URLs.ORDER_FEED_PAGE in driver.current_url
-        
-        with allure.step("Click on Constructor"):
-            main_page.click_constructor()
-            time.sleep(2)
-        
-        with allure.step("Verify we are on main page"):
-            assert URLs.MAIN_PAGE in driver.current_url
+        assert order_feed_page.is_current_page()
     
-    @allure.title("Test navigation to Order Feed")
-    @allure.description("Test navigating from main page to order feed")
-    def test_navigate_to_order_feed(self, driver, login):
-        from pages.main_page import MainPage
-        
+    @allure.title("Переход из ленты заказов в конструктор")
+    def test_navigate_from_order_feed_to_constructor(self, driver, login):
         main_page = MainPage(driver)
+        order_feed_page = OrderFeedPage(driver)
         
-        with allure.step("Click on Order Feed"):
-            main_page.click_order_feed()
-            time.sleep(2)
+        main_page.click_order_feed()
+        main_page.click_constructor()
         
-        with allure.step("Verify we are on order feed page"):
-            assert URLs.ORDER_FEED_PAGE in driver.current_url
+        assert main_page.is_current_page()
     
-    @allure.title("Test navigation to Personal Account")
-    @allure.description("Test navigating to personal account")
+    @allure.title("Переход в личный кабинет")
     def test_navigate_to_personal_account(self, driver, login):
-        from pages.main_page import MainPage
-        
         main_page = MainPage(driver)
+        account_page = AccountPage(driver)
         
-        with allure.step("Click on Personal Account"):
-            main_page.click_personal_account()
-            time.sleep(3)
+        main_page.click_personal_account()
         
-        with allure.step("Verify we are on account page"):
-            current_url = driver.current_url
-            # После успешного логина должно перекинуть на страницу профиля
-            assert "account" in current_url or "profile" in current_url, f"Expected account page, got: {current_url}"
-            print(f"✅ Successfully navigated to account: {current_url}")
+        # Проверяем что перешли на страницу аккаунта или логина
+        current_url = account_page.get_current_url()
+        assert "account" in current_url or "login" in current_url

@@ -1,11 +1,12 @@
 from selenium.webdriver.common.by import By
 
+
 class AccountPageLocators:
     # Profile section
     PROFILE_BUTTON = (By.XPATH, "//a[text()='Профиль']")
-    LOGOUT_BUTTON = (By.XPATH, "//button[text()='Выход']")
+    LOGOUT_BUTTON = (By.XPATH, "//button[contains(text(), 'Выход')]")
     
-    # Login form - ОБНОВЛЕННЫЕ ЛОКАТОРЫ
+    # Login form
     EMAIL_INPUT = (By.XPATH, "//input[@type='text' and @name='name']")
     PASSWORD_INPUT = (By.XPATH, "//input[@type='password']")
     LOGIN_BUTTON = (By.XPATH, "//button[text()='Войти']")
@@ -15,7 +16,7 @@ class AccountPageLocators:
     REGISTER_BUTTON = (By.XPATH, "//button[text()='Зарегистрироваться']")
     
     # Navigation
-    LOGO_LINK = (By.XPATH, "//div[contains(@class, 'AppHeader_header__logo__')]")
+    LOGO_LINK = (By.XPATH, "//div[contains(@class, 'AppHeader_header__logo')]")
     CONSTRUCTOR_LINK = (By.XPATH, "//p[text()='Конструктор']")
     
     # Error messages

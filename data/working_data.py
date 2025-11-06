@@ -1,15 +1,7 @@
+from data.test_data import TestData
+
 class WorkingData:
-    BASE_URL = "https://stellarburgers.education-services.ru"
-    
-    # Данные которые РЕАЛЬНО работают (из успешной регистрации)
+    BASE_URL = TestData.BASE_URL
     EMAIL = "test_user_215580@yandex.ru"
     PASSWORD = "TestPassword123"
     NAME = "Test_User_215580"
-    
-    @classmethod
-    def get_credentials(cls):
-        return {
-            "email": cls.EMAIL,
-            "password": cls.PASSWORD,
-            "name": cls.NAME
-        }

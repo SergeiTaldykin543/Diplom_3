@@ -1,45 +1,47 @@
 import pytest
 import allure
+from pages.main_page import MainPage
+from pages.order_feed_page import OrderFeedPage
+
 
 @allure.feature("Order Feed")
 class TestOrderFeed:
     
-    @allure.title("Test order counters are displayed")
-    @allure.description("Test that order counters are displayed on order feed page")
-    def test_order_counters_are_displayed(self, driver, login):
-        from pages.order_feed_page import OrderFeedPage
-        from pages.main_page import MainPage
-        
+    @allure.title("Переход на страницу ленты заказов")
+    def test_navigate_to_order_feed_page(self, driver, login):
         main_page = MainPage(driver)
         order_feed_page = OrderFeedPage(driver)
         
-        with allure.step("Navigate to order feed"):
-            main_page.click_order_feed()
+        main_page.click_order_feed()
         
-        with allure.step("Get counter values"):
-            all_time = order_feed_page.get_orders_done_all_time()
-            today = order_feed_page.get_orders_done_today()
-        
-        with allure.step("Verify counters are displayed"):
-            assert all_time >= 0
-            assert today >= 0
+        assert order_feed_page.is_current_page()
     
-    @allure.title("Test orders in progress section")
-    @allure.description("Test that orders in progress section is accessible")
-    def test_orders_in_progress_section(self, driver, login):
-        from pages.order_feed_page import OrderFeedPage
-        from pages.main_page import MainPage
-        
+    @allure.title("Отображение счетчиков заказов")
+    def test_order_counters_are_displayed(self, driver, login):
         main_page = MainPage(driver)
         order_feed_page = OrderFeedPage(driver)
         
-        with allure.step("Navigate to order feed"):
-            main_page.click_order_feed()
+        main_page.click_order_feed()
+        assert order_feed_page.is_current_page()
         
-        with allure.step("Get orders in progress"):
-            orders_in_progress = order_feed_page.get_orders_in_progress()
+        # Проверяем что можем получить значения счетчиков
+        all_time = order_feed_page.get_orders_done_all_time()
+        today = order_feed_page.get_orders_done_today()
         
-        with allure.step("Verify orders section is accessible"):
-            # We can't guarantee there will be orders in progress,
-            # but we can verify the functionality works
-            assert orders_in_progress is not None
+        # Счетчики должны быть неотрицательными числами
+        assert all_time >= 0
+        assert today >= 0
+    
+    @allure.title("Доступность ленты заказов")
+    def test_order_feed_accessible(self, driver, login):
+        main_page = MainPage(driver)
+        order_feed_page = OrderFeedPage(driver)
+        
+        main_page.click_order_feed()
+        
+        # Проверяем базовую функциональность
+        assert order_feed_page.is_current_page()
+        
+        # Проверяем что можем получить список заказов (может быть пустым)
+        order_items = order_feed_page.get_order_items()
+        assert order_items is not None

@@ -1,16 +1,9 @@
-from data.test_data import TestData
+from data.working_data import WorkingData
 
 class URLs:
-    MAIN_PAGE = TestData.BASE_URL.rstrip('/')  # Убираем слэш в конце
-    LOGIN_PAGE = f"{TestData.BASE_URL.rstrip('/')}/login"
-    REGISTER_PAGE = f"{TestData.BASE_URL.rstrip('/')}/register"
-    FORGOT_PASSWORD_PAGE = f"{TestData.BASE_URL.rstrip('/')}/forgot-password"
-    PROFILE_PAGE = f"{TestData.BASE_URL.rstrip('/')}/account/profile"
-    ORDER_FEED_PAGE = f"{TestData.BASE_URL.rstrip('/')}/feed"
-    
-    # API endpoints
-    API_LOGIN = f"{TestData.BASE_URL.rstrip('/')}/api/auth/login"
-    API_REGISTER = f"{TestData.BASE_URL.rstrip('/')}/api/auth/register"
-    API_USER = f"{TestData.BASE_URL.rstrip('/')}/api/auth/user"
-    API_ORDERS = f"{TestData.BASE_URL.rstrip('/')}/api/orders"
-    API_INGREDIENTS = f"{TestData.BASE_URL.rstrip('/')}/api/ingredients"
+    MAIN_PAGE = WorkingData.BASE_URL
+    LOGIN_PAGE = f"{WorkingData.BASE_URL}/login"
+    REGISTER_PAGE = f"{WorkingData.BASE_URL}/register"
+    FORGOT_PASSWORD_PAGE = f"{WorkingData.BASE_URL}/forgot-password"
+    PROFILE_PAGE = f"{WorkingData.BASE_URL}/account/profile"
+    ORDER_FEED_PAGE = f"{WorkingData.BASE_URL}/feed"
