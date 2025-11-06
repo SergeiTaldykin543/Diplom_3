@@ -1,4 +1,11 @@
 class TestData:
-    EMAIL = "sergey_taldykin_31@yandex.ru"
+    BASE_URL = "https://stellarburgers.education-services.ru"
+    
+    # Проверьте эти данные - они должны быть правильными
+    EMAIL = "sergeiT_31@yandex.ru"
     PASSWORD = "1234567S"
-    NAME = "Sergey_Taldykin_31"
+    NAME = "Sergei_31"
+    
+    # Альтернативные тестовые данные
+    TEST_EMAIL = "test_user_12345@example.com"
+    TEST_PASSWORD = "TestPassword123"
