@@ -2,6 +2,6 @@ from data.test_data import TestData
 
 class WorkingData:
     BASE_URL = TestData.BASE_URL
-    EMAIL = "test_user_215580@yandex.ru"
-    PASSWORD = "TestPassword123"
-    NAME = "Test_User_215580"
+    EMAIL = TestData.VALID_USER["email"]
+    PASSWORD = TestData.VALID_USER["password"]
+    NAME = TestData.VALID_USER["name"]

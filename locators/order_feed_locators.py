@@ -1,8 +1,7 @@
 from selenium.webdriver.common.by import By
 
-
 class OrderFeedLocators:
-    # Order counters - более гибкие локаторы
+    # Order counters
     ORDERS_DONE_ALL_TIME = (By.XPATH, "//p[contains(text(), 'Выполнено за всё время')]/following-sibling::p")
     ORDERS_DONE_TODAY = (By.XPATH, "//p[contains(text(), 'Выполнено за сегодня')]/following-sibling::p")
     
@@ -10,7 +9,7 @@ class OrderFeedLocators:
     ORDERS_IN_PROGRESS_SECTION = (By.XPATH, "//div[contains(text(), 'В работе')]")
     ORDERS_IN_PROGRESS = (By.XPATH, "//ul[contains(@class, 'OrderFeed_orderList')]//li")
     
-    # Order items - более гибкие локаторы
+    # Order items
     ORDER_ITEMS = (By.XPATH, "//div[contains(@class, 'OrderHistory_listItem') or contains(@class, 'OrderFeed_orderItem')]")
     ORDER_NUMBER = (By.XPATH, ".//p[contains(@class, 'textBox') or contains(@class, 'orderNumber')]")
     

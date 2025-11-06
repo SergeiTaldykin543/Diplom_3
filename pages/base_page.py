@@ -12,7 +12,6 @@ class BasePage:
 
     @allure.step("Открыть страницу")
     def open(self):
-        """Открывает страницу по URL"""
         self.driver.get(self.url)
         self.wait_for_page_loaded()
         return self
@@ -68,61 +67,40 @@ class BasePage:
 
     @allure.step("Ожидание загрузки страницы")
     def wait_for_page_loaded(self, timeout=10):
-        """Ждет полной загрузки страницы"""
         try:
             WebDriverWait(self.driver, timeout).until(
                 lambda driver: driver.execute_script("return document.readyState") == "complete"
             )
             return True
         except TimeoutException:
-            print(f"⚠️ Страница не загрузилась за {timeout} секунд")
             return False
 
     @allure.step("Ожидание изменения URL")
     def wait_for_url_change(self, original_url, timeout=10):
-        """Ждет изменения URL с исходного значения"""
         try:
             WebDriverWait(self.driver, timeout).until(
                 lambda driver: driver.current_url != original_url
             )
             return True
         except TimeoutException:
-            print(f"⚠️ URL не изменился за {timeout} секунд")
             return False
 
-    @allure.step("Ожидание появления URL содержащего текст")
-    def wait_for_url_contains(self, text, timeout=10):
-        """Ждет появления текста в URL"""
+    @allure.step("Ожидание отсутствия перекрывающих элементов")
+    def wait_for_no_overlay(self, timeout=10):
         try:
             WebDriverWait(self.driver, timeout).until(
-                EC.url_contains(text)
+                lambda driver: len(driver.find_elements(By.XPATH, "//div[contains(@class, 'Modal_modal_overlay')]")) == 0
             )
             return True
         except TimeoutException:
-            print(f"⚠️ URL не содержит '{text}' за {timeout} секунд")
             return False
 
     @allure.step("Ожидание исчезновения элемента")
     def wait_for_element_to_disappear(self, locator, timeout=10):
-        """Ждет исчезновения элемента"""
         try:
             WebDriverWait(self.driver, timeout).until(
                 EC.invisibility_of_element_located(locator)
             )
             return True
         except TimeoutException:
-            print(f"⚠️ Элемент не исчез за {timeout} секунд")
-            return False
-
-    @allure.step("Ожидание отсутствия перекрывающих элементов")
-    def wait_for_no_overlay(self, timeout=10):
-        """Ждет исчезновения перекрывающих элементов (модальных окон)"""
-        try:
-        # Ждем исчезновения модальных окон или оверлеев
-            WebDriverWait(self.driver, timeout).until(
-                lambda driver: len(driver.find_elements(By.XPATH, "//div[contains(@class, 'Modal_modal_overlay')]")) == 0
-          )
-            return True
-        except TimeoutException:
-            print("⚠️ Модальное окно все еще присутствует после ожидания")
             return False

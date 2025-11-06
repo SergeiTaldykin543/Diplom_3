@@ -1,6 +1,5 @@
 from selenium.webdriver.common.by import By
 
-
 class MainPageLocators:
     # Header
     CONSTRUCTOR_BUTTON = (By.XPATH, "//p[text()='Конструктор']")
@@ -12,7 +11,7 @@ class MainPageLocators:
     SAUCES_SECTION = (By.XPATH, "//h2[text()='Соусы']")
     FILLINGS_SECTION = (By.XPATH, "//h2[text()='Начинки']")
     
-    # Ingredients - более гибкие локаторы
+    # Ingredients
     INGREDIENT_ITEM = (By.XPATH, "//section[contains(@class, 'BurgerIngredients_ingredients')]//a")
     INGREDIENT_COUNTER = (By.XPATH, ".//div[contains(@class, 'counter')]")
     

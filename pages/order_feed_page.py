@@ -2,8 +2,6 @@ from pages.base_page import BasePage
 from locators.order_feed_locators import OrderFeedLocators
 from utilities.urls import URLs
 import allure
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import TimeoutException
 
 class OrderFeedPage(BasePage):
     def __init__(self, driver):
@@ -12,25 +10,23 @@ class OrderFeedPage(BasePage):
     @allure.step("Проверить что текущая страница - лента заказов")
     def is_current_page(self):
         current_url = self.get_current_url()
-        # Более гибкая проверка для обоих браузеров
-        return "feed" in current_url or "order-feed" in current_url or "orders" in current_url
+        return "feed" in current_url
 
     @allure.step("Подождать загрузки ленты заказов")
     def wait_for_order_feed_loaded(self, timeout=15):
-        """Ждет загрузки элементов ленты заказов"""
         try:
-            # Пробуем разные элементы для подтверждения загрузки
-            WebDriverWait(self.driver, timeout).until(
-                lambda driver: (
-                    self.is_element_visible(OrderFeedLocators.ORDER_ITEMS) or
-                    self.is_element_visible(OrderFeedLocators.ORDERS_DONE_ALL_TIME) or
-                    self.is_element_visible(OrderFeedLocators.ORDERS_DONE_TODAY)
-                )
-            )
+            self.wait_for_element_to_be_visible(OrderFeedLocators.ORDER_ITEMS, timeout=timeout)
             return True
-        except TimeoutException:
-            print("⚠️ Элементы ленты заказов не загрузились")
-            return False
+        except:
+            try:
+                self.wait_for_element_to_be_visible(OrderFeedLocators.ORDERS_DONE_ALL_TIME, timeout=5)
+                return True
+            except:
+                try:
+                    self.wait_for_element_to_be_visible(OrderFeedLocators.ORDERS_DONE_TODAY, timeout=5)
+                    return True
+                except:
+                    return False
 
     @allure.step("Получить количество выполненных заказов за все время")
     def get_orders_done_all_time(self):
