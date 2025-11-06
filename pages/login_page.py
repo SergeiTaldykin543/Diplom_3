@@ -3,7 +3,6 @@ from locators.account_page_locators import AccountPageLocators
 from utilities.urls import URLs
 import allure
 
-
 class LoginPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver, URLs.LOGIN_PAGE)
@@ -29,4 +28,10 @@ class LoginPage(BasePage):
         self.enter_email(email)
         self.enter_password(password)
         self.click_login_button()
+        self.wait_for_page_loaded()
+
+    @allure.step("Кликнуть на конструктор со страницы логина")
+    def click_constructor(self):
+        self.wait_for_no_overlay()
+        self.click_js(AccountPageLocators.CONSTRUCTOR_LINK)
         self.wait_for_page_loaded()
