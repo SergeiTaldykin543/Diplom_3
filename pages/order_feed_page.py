@@ -1,7 +1,8 @@
 from pages.base_page import BasePage
 from locators.order_feed_locators import OrderFeedLocators
-from utilities.urls import URLs
+from data.urls import URLs
 import allure
+
 
 class OrderFeedPage(BasePage):
     def __init__(self, driver):
@@ -17,15 +18,15 @@ class OrderFeedPage(BasePage):
         try:
             self.wait_for_element_to_be_visible(OrderFeedLocators.ORDER_ITEMS, timeout=timeout)
             return True
-        except:
+        except Exception:
             try:
                 self.wait_for_element_to_be_visible(OrderFeedLocators.ORDERS_DONE_ALL_TIME, timeout=5)
                 return True
-            except:
+            except Exception:
                 try:
                     self.wait_for_element_to_be_visible(OrderFeedLocators.ORDERS_DONE_TODAY, timeout=5)
                     return True
-                except:
+                except Exception:
                     return False
 
     @allure.step("Получить количество выполненных заказов за все время")
@@ -35,7 +36,7 @@ class OrderFeedPage(BasePage):
                 text = self.get_text(OrderFeedLocators.ORDERS_DONE_ALL_TIME)
                 return int(text) if text and text.isdigit() else 0
             return 0
-        except:
+        except Exception:
             return 0
 
     @allure.step("Получить количество выполненных заказов за сегодня")
@@ -45,12 +46,12 @@ class OrderFeedPage(BasePage):
                 text = self.get_text(OrderFeedLocators.ORDERS_DONE_TODAY)
                 return int(text) if text and text.isdigit() else 0
             return 0
-        except:
+        except Exception:
             return 0
 
     @allure.step("Получить список заказов")
     def get_order_items(self):
         try:
             return self.find_elements(OrderFeedLocators.ORDER_ITEMS)
-        except:
+        except Exception:
             return []

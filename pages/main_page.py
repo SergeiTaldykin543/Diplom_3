@@ -1,7 +1,8 @@
 from pages.base_page import BasePage
 from locators.main_page_locators import MainPageLocators
-from utilities.urls import URLs
+from data.urls import URLs
 import allure
+
 
 class MainPage(BasePage):
     def __init__(self, driver):
@@ -10,7 +11,7 @@ class MainPage(BasePage):
     @allure.step("Проверить что текущая страница - главная")
     def is_current_page(self):
         current_url = self.get_current_url()
-        return (self.url in current_url or "stellarburgers" in current_url) and \
+        return (URLs.MAIN_PAGE in current_url or "stellarburgers" in current_url) and \
                "account" not in current_url and "profile" not in current_url
 
     @allure.step("Кликнуть на конструктор")
@@ -24,7 +25,8 @@ class MainPage(BasePage):
         self.wait_for_no_overlay()
         original_url = self.get_current_url()
         
-        if "firefox" in self.driver.name.lower():
+        # Используем базовые методы вместо прямого обращения к driver
+        if "firefox" in self.get_browser_name():
             self.click_js(MainPageLocators.ORDER_FEED_BUTTON)
         else:
             self.click(MainPageLocators.ORDER_FEED_BUTTON)
@@ -37,7 +39,8 @@ class MainPage(BasePage):
         self.wait_for_no_overlay()
         original_url = self.get_current_url()
         
-        if "firefox" in self.driver.name.lower():
+        # Используем базовые методы вместо прямого обращения к driver
+        if "firefox" in self.get_browser_name():
             self.click_js(MainPageLocators.PERSONAL_ACCOUNT_BUTTON)
         else:
             self.click(MainPageLocators.PERSONAL_ACCOUNT_BUTTON)
@@ -45,7 +48,7 @@ class MainPage(BasePage):
         self.wait_for_url_change(original_url)
         self.wait_for_page_loaded()
 
-    @allure.step("Кликнуть на ингредиент по индексу {index}")
+    @allure.step("Кликнуть на ингредиент по индексу")
     def click_ingredient(self, index=0):
         try:
             self.wait_for_no_overlay()
@@ -55,7 +58,7 @@ class MainPage(BasePage):
                 self.wait_for_element_to_be_visible(MainPageLocators.INGREDIENT_MODAL)
                 return True
             return False
-        except:
+        except Exception:
             return False
 
     @allure.step("Закрыть модальное окно")
@@ -64,7 +67,7 @@ class MainPage(BasePage):
             self.click(MainPageLocators.MODAL_CLOSE_BUTTON)
             self.wait_for_element_to_disappear(MainPageLocators.INGREDIENT_MODAL)
             return True
-        except:
+        except Exception:
             return False
 
     @allure.step("Проверить видимость модального окна")
@@ -75,5 +78,5 @@ class MainPage(BasePage):
     def get_modal_ingredient_name(self):
         try:
             return self.get_text(MainPageLocators.MODAL_INGREDIENT_NAME)
-        except:
+        except Exception:
             return ""

@@ -2,13 +2,14 @@ import allure
 from pages.login_page import LoginPage
 from pages.main_page import MainPage
 from pages.account_page import AccountPage
-from data.working_data import WorkingData
+from data.test_data import TestData
+
 
 class AuthService:
 
     @staticmethod
     @allure.step("Авторизовать пользователя")
-    def login(driver, email=WorkingData.EMAIL, password=WorkingData.PASSWORD):
+    def login(driver, email=TestData.VALID_USER["email"], password=TestData.VALID_USER["password"]):
         login_page = LoginPage(driver)
         main_page = MainPage(driver)
 

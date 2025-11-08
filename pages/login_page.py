@@ -1,7 +1,8 @@
 from pages.base_page import BasePage
 from locators.account_page_locators import AccountPageLocators
-from utilities.urls import URLs
+from data.urls import URLs
 import allure
+
 
 class LoginPage(BasePage):
     def __init__(self, driver):
@@ -9,9 +10,9 @@ class LoginPage(BasePage):
 
     @allure.step("Проверить что текущая страница - логин")
     def is_current_page(self):
-        return self.url in self.get_current_url()
+        return URLs.LOGIN_PAGE in self.get_current_url()
 
-    @allure.step("Ввести email: {email}")
+    @allure.step("Ввести email")
     def enter_email(self, email):
         self.send_keys(AccountPageLocators.EMAIL_INPUT, email)
 
@@ -23,12 +24,13 @@ class LoginPage(BasePage):
     def click_login_button(self):
         self.wait_for_no_overlay()
         
-        if "firefox" in self.driver.name.lower():
+        # Используем базовые методы вместо прямого обращения к driver
+        if "firefox" in self.get_browser_name():
             self.click_js(AccountPageLocators.LOGIN_BUTTON)
         else:
             self.click(AccountPageLocators.LOGIN_BUTTON)
 
-    @allure.step("Выполнить вход с email: {email}")
+    @allure.step("Выполнить вход")
     def login(self, email, password):
         self.enter_email(email)
         self.enter_password(password)

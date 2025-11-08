@@ -4,11 +4,11 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 import allure
 
+
 class BasePage:
     def __init__(self, driver, url):
         self.driver = driver
         self.url = url
-        self.wait = WebDriverWait(driver, 10)
 
     @allure.step("Открыть страницу")
     def open(self):
@@ -21,32 +21,36 @@ class BasePage:
         return self.driver.current_url
 
     @allure.step("Найти элемент {locator}")
-    def find_element(self, locator):
-        return self.wait.until(EC.visibility_of_element_located(locator))
+    def find_element(self, locator, timeout=10):
+        return WebDriverWait(self.driver, timeout).until(
+            EC.visibility_of_element_located(locator)
+        )
 
     @allure.step("Найти элементы {locator}")
-    def find_elements(self, locator):
-        return self.wait.until(EC.visibility_of_all_elements_located(locator))
+    def find_elements(self, locator, timeout=10):
+        return WebDriverWait(self.driver, timeout).until(
+            EC.visibility_of_all_elements_located(locator)
+        )
 
     @allure.step("Кликнуть на элемент {locator}")
-    def click(self, locator):
-        element = self.find_element(locator)
+    def click(self, locator, timeout=10):
+        element = self.find_element(locator, timeout)
         element.click()
 
     @allure.step("Кликнуть на элемент с помощью JavaScript {locator}")
-    def click_js(self, locator):
-        element = self.find_element(locator)
+    def click_js(self, locator, timeout=10):
+        element = self.find_element(locator, timeout)
         self.driver.execute_script("arguments[0].click();", element)
 
-    @allure.step("Ввести текст '{text}' в элемент {locator}")
-    def send_keys(self, locator, text):
-        element = self.find_element(locator)
+    @allure.step("Ввести текст в элемент {locator}")
+    def send_keys(self, locator, text, timeout=10):
+        element = self.find_element(locator, timeout)
         element.clear()
         element.send_keys(text)
 
     @allure.step("Получить текст элемента {locator}")
-    def get_text(self, locator):
-        element = self.find_element(locator)
+    def get_text(self, locator, timeout=10):
+        element = self.find_element(locator, timeout)
         return element.text
 
     @allure.step("Ожидание видимости элемента {locator}")
@@ -104,3 +108,11 @@ class BasePage:
             return True
         except TimeoutException:
             return False
+
+    @allure.step("Получить название браузера")
+    def get_browser_name(self):
+        return self.driver.name.lower()
+
+    @allure.step("Выполнить JavaScript код")
+    def execute_script(self, script, *args):
+        return self.driver.execute_script(script, *args)

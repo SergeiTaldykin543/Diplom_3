@@ -1,5 +1,5 @@
 class TestScenarios:
-    """Тестовые сценарии для различных состояний приложения"""
+    """Test scenarios for different application states"""
     
     NAVIGATION = {
         "authenticated_user": {
