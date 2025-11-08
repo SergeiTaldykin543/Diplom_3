@@ -74,7 +74,6 @@ class TestUserActions:
         account_page.click_logout()
         main_page.wait_for_page_loaded()
         
-        # Пытаемся перейти в личный кабинет
         if main_page.is_current_page():
             main_page.click_personal_account()
             login_page.wait_for_page_loaded()

@@ -24,7 +24,6 @@ class LoginPage(BasePage):
     def click_login_button(self):
         self.wait_for_no_overlay()
         
-        # Используем базовые методы вместо прямого обращения к driver
         if "firefox" in self.get_browser_name():
             self.click_js(AccountPageLocators.LOGIN_BUTTON)
         else:

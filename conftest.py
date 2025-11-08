@@ -76,10 +76,8 @@ def api_register_user():
         "name": f"API_User_{random_suffix}"
     }
     
-    # Гарантируем создание пользователя
     response = requests.post(URLs.API_REGISTER, json=user_data, timeout=10)
     
-    # Если регистрация не удалась, проваливаем тест
     if response.status_code != 200:
         pytest.fail(f"Failed to register user via API. Status: {response.status_code}, Response: {response.text}")
     
@@ -87,12 +85,10 @@ def api_register_user():
     
     yield user_data
     
-    # Постусловие - гарантированная очистка тестовых данных
     headers = {'Authorization': f"Bearer {user_data['access_token']}"}
     try:
         requests.delete(URLs.API_USER, headers=headers, timeout=10)
     except requests.RequestException as e:
-        # Логируем ошибку, но не проваливаем тест
         print(f"Warning: Failed to delete test user: {e}")
 
 

@@ -25,7 +25,6 @@ class MainPage(BasePage):
         self.wait_for_no_overlay()
         original_url = self.get_current_url()
         
-        # Используем базовые методы вместо прямого обращения к driver
         if "firefox" in self.get_browser_name():
             self.click_js(MainPageLocators.ORDER_FEED_BUTTON)
         else:
@@ -39,7 +38,6 @@ class MainPage(BasePage):
         self.wait_for_no_overlay()
         original_url = self.get_current_url()
         
-        # Используем базовые методы вместо прямого обращения к driver
         if "firefox" in self.get_browser_name():
             self.click_js(MainPageLocators.PERSONAL_ACCOUNT_BUTTON)
         else:

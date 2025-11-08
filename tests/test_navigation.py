@@ -50,17 +50,13 @@ class TestNavigation:
         
         current_url = driver.current_url
         
-        # Для Firefox может потребоваться альтернативная навигация
         if "firefox" in driver.name.lower() and ("account" in current_url or "profile" in current_url):
-            # В Firefox логотип может не работать, используем конструктор
             account_page.click_constructor()
             main_page.wait_for_page_loaded()
             current_url = driver.current_url
         
-        # Проверяем что мы не в аккаунте
         is_not_in_account = "account" not in current_url and "profile" not in current_url
         is_main_page = main_page.is_current_page()
         
-        # Успехом считается либо главная страница, либо любой URL не в аккаунте
         assert is_not_in_account or is_main_page, \
             f"После навигации остались в аккаунте: {current_url}"
