@@ -9,6 +9,7 @@ class BasePage:
     def __init__(self, driver, url):
         self.driver = driver
         self.url = url
+        self.wait = WebDriverWait(driver, 10)
 
     @allure.step("Открыть страницу")
     def open(self):
@@ -19,6 +20,10 @@ class BasePage:
     @allure.step("Получить текущий URL")
     def get_current_url(self):
         return self.driver.current_url
+
+    @allure.step("Получить имя браузера")
+    def get_browser_name(self):
+        return self.driver.name.lower()
 
     @allure.step("Найти элемент {locator}")
     def find_element(self, locator, timeout=10):
@@ -35,7 +40,12 @@ class BasePage:
     @allure.step("Кликнуть на элемент {locator}")
     def click(self, locator, timeout=10):
         element = self.find_element(locator, timeout)
-        element.click()
+        
+        # Универсальный клик для всех браузеров
+        if "firefox" in self.get_browser_name():
+            self.driver.execute_script("arguments[0].click();", element)
+        else:
+            element.click()
 
     @allure.step("Кликнуть на элемент с помощью JavaScript {locator}")
     def click_js(self, locator, timeout=10):
@@ -108,11 +118,3 @@ class BasePage:
             return True
         except TimeoutException:
             return False
-
-    @allure.step("Получить название браузера")
-    def get_browser_name(self):
-        return self.driver.name.lower()
-
-    @allure.step("Выполнить JavaScript код")
-    def execute_script(self, script, *args):
-        return self.driver.execute_script(script, *args)

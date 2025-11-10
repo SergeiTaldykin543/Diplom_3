@@ -15,19 +15,12 @@ class OrderFeedPage(BasePage):
 
     @allure.step("Подождать загрузки ленты заказов")
     def wait_for_order_feed_loaded(self, timeout=15):
+        # Используем один надежный признак загрузки страницы
         try:
             self.wait_for_element_to_be_visible(OrderFeedLocators.ORDER_ITEMS, timeout=timeout)
             return True
         except Exception:
-            try:
-                self.wait_for_element_to_be_visible(OrderFeedLocators.ORDERS_DONE_ALL_TIME, timeout=5)
-                return True
-            except Exception:
-                try:
-                    self.wait_for_element_to_be_visible(OrderFeedLocators.ORDERS_DONE_TODAY, timeout=5)
-                    return True
-                except Exception:
-                    return False
+            return False
 
     @allure.step("Получить количество выполненных заказов за все время")
     def get_orders_done_all_time(self):

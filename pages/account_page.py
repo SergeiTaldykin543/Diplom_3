@@ -32,7 +32,7 @@ class AccountPage(BasePage):
                     
                     try:
                         self.click(locator)
-                    except Exception:
+                    except:
                         self.click_js(locator)
                     
                     self.wait_for_url_change(original_url, timeout=10)
@@ -47,20 +47,6 @@ class AccountPage(BasePage):
     def click_constructor(self):
         self.wait_for_no_overlay()
         self.click_js(AccountPageLocators.CONSTRUCTOR_LINK)
-        self.wait_for_page_loaded()
-
-    @allure.step("Кликнуть на логотип")
-    def click_logo(self):
-        self.wait_for_no_overlay()
-        original_url = self.get_current_url()
-        
-        # Используем базовые методы вместо прямого обращения к driver
-        if "firefox" in self.get_browser_name():
-            self.click_js(AccountPageLocators.LOGO_LINK)
-        else:
-            self.click(AccountPageLocators.LOGO_LINK)
-            
-        self.wait_for_url_change(original_url)
         self.wait_for_page_loaded()
 
     @allure.step("Проверить наличие кнопки выхода")

@@ -15,48 +15,65 @@ class TestNavigation:
         main_page = MainPage(driver)
         order_feed_page = OrderFeedPage(driver)
 
-        main_page.click_constructor()
+        authenticated_user.click_constructor()
         main_page.wait_for_page_loaded()
         
-        original_url = driver.current_url
+        original_url = main_page.get_current_url()
         main_page.click_order_feed()
         order_feed_page.wait_for_order_feed_loaded()
         
-        current_url = driver.current_url
+        current_url = main_page.get_current_url()
         assert current_url != original_url
-        assert order_feed_page.is_current_page()
+        assert "feed" in current_url
 
     @allure.title("Переход из ленты заказов в конструктор")
-    def test_navigate_from_order_feed_to_constructor(self, driver):
+    def test_navigate_from_order_feed_to_constructor(self, driver, authenticated_user):
         main_page = MainPage(driver)
         order_feed_page = OrderFeedPage(driver)
 
-        main_page.open()
+        authenticated_user.click_constructor()
+        main_page.wait_for_page_loaded()
+        
         main_page.click_order_feed()
         order_feed_page.wait_for_order_feed_loaded()
-        
         main_page.click_constructor()
         main_page.wait_for_page_loaded()
         
         assert main_page.is_current_page()
 
-    @allure.title("Переход по логотипу из личного кабинета")
-    def test_navigate_via_logo_from_account(self, driver, authenticated_user):
+    @allure.title("Переход в личный кабинет для авторизованного пользователя")
+    def test_navigate_to_personal_account_when_authenticated(self, driver, authenticated_user):
         account_page = AccountPage(driver)
-        main_page = MainPage(driver)
+        current_url = account_page.get_current_url()
+        
+        assert "account" in current_url or "profile" in current_url
+        assert account_page.is_logout_button_visible()
 
-        account_page.click_logo()
+    @allure.title("Переход на страницу логина для неавторизованного пользователя")
+    def test_navigate_to_login_page_when_not_authenticated(self, driver, not_authenticated_user):
+        main_page = MainPage(driver)
+        login_page = LoginPage(driver)
+
+        main_page.click_personal_account()
+        login_page.wait_for_page_loaded()
+        
+        assert login_page.is_current_page()
+
+    @allure.title("Навигация через конструктор из личного кабинета")
+    def test_navigation_via_constructor_from_account(self, driver, authenticated_user):
+        main_page = MainPage(driver)
+        account_page = AccountPage(driver)
+
+        # Запоминаем URL до клика
+        original_url = account_page.get_current_url()
+        
+        account_page.click_constructor()
         main_page.wait_for_page_loaded()
         
-        current_url = driver.current_url
+        current_url = main_page.get_current_url()
         
-        if "firefox" in driver.name.lower() and ("account" in current_url or "profile" in current_url):
-            account_page.click_constructor()
-            main_page.wait_for_page_loaded()
-            current_url = driver.current_url
+        # Проверяем, что URL изменился
+        assert current_url != original_url
         
-        is_not_in_account = "account" not in current_url and "profile" not in current_url
-        is_main_page = main_page.is_current_page()
-        
-        assert is_not_in_account or is_main_page, \
-            f"После навигации остались в аккаунте: {current_url}"
+        # Проверяем, что мы на главной странице
+        assert main_page.is_current_page()

@@ -4,6 +4,7 @@ from pages.main_page import MainPage
 from pages.order_feed_page import OrderFeedPage
 from data.test_scenarios import TestScenarios
 
+
 @allure.feature("Order Feed")
 class TestOrderFeed:
 

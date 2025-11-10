@@ -24,12 +24,7 @@ class MainPage(BasePage):
     def click_order_feed(self):
         self.wait_for_no_overlay()
         original_url = self.get_current_url()
-        
-        if "firefox" in self.get_browser_name():
-            self.click_js(MainPageLocators.ORDER_FEED_BUTTON)
-        else:
-            self.click(MainPageLocators.ORDER_FEED_BUTTON)
-            
+        self.click(MainPageLocators.ORDER_FEED_BUTTON)
         self.wait_for_url_change(original_url)
         self.wait_for_page_loaded()
 
@@ -37,12 +32,7 @@ class MainPage(BasePage):
     def click_personal_account(self):
         self.wait_for_no_overlay()
         original_url = self.get_current_url()
-        
-        if "firefox" in self.get_browser_name():
-            self.click_js(MainPageLocators.PERSONAL_ACCOUNT_BUTTON)
-        else:
-            self.click(MainPageLocators.PERSONAL_ACCOUNT_BUTTON)
-            
+        self.click(MainPageLocators.PERSONAL_ACCOUNT_BUTTON)
         self.wait_for_url_change(original_url)
         self.wait_for_page_loaded()
 

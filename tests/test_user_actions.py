@@ -13,7 +13,7 @@ class TestUserActions:
     @allure.title("Переход в личный кабинет для авторизованного пользователя")
     def test_navigate_to_personal_account_when_authenticated(self, driver, authenticated_user):
         account_page = AccountPage(driver)
-        current_url = driver.current_url
+        current_url = account_page.get_current_url()
         
         assert "account" in current_url or "profile" in current_url
         assert account_page.is_logout_button_visible()
@@ -38,43 +38,25 @@ class TestUserActions:
         
         assert main_page.is_current_page()
 
-    @allure.title("Выход из системы перенаправляет с профиля")
-    def test_logout_redirects_from_profile(self, driver, authenticated_user):
-        account_page = AccountPage(driver)
-        
-        original_url = driver.current_url
-        account_page.click_logout()
-        
-        current_url = driver.current_url
-        assert current_url != original_url
-        assert "account" not in current_url
-        assert "profile" not in current_url
-
-    @allure.title("После выхода открывается главная страница или логин")
-    def test_after_logout_opens_main_or_login_page(self, driver, authenticated_user):
+    @allure.title("Выход из системы")
+    def test_user_logout(self, driver, authenticated_user):
         account_page = AccountPage(driver)
         login_page = LoginPage(driver)
         main_page = MainPage(driver)
 
+        original_url = account_page.get_current_url()
+        
         account_page.click_logout()
-        main_page.wait_for_page_loaded()
+        login_page.wait_for_page_loaded()
         
-        current_url = driver.current_url
-        is_main_page = main_page.is_current_page()
-        is_login_page = login_page.is_current_page()
+        current_url = login_page.get_current_url()
         
-        assert is_main_page or is_login_page
-
-    @allure.title("После выхода требуется авторизация для доступа к личному кабинету")
-    def test_requires_auth_after_logout(self, driver, authenticated_user):
-        account_page = AccountPage(driver)
-        login_page = LoginPage(driver)
-        main_page = MainPage(driver)
-
-        account_page.click_logout()
-        main_page.wait_for_page_loaded()
+        assert "account" not in current_url and "profile" not in current_url
+        assert login_page.is_current_page()
         
-        if main_page.is_current_page():
-            main_page.click_personal_account()
-            login_page.wait_for_page_loaded()
-            assert login_page.is_current_page()
+        # Проверяем, что после выхода при попытке перейти в ЛК открывается логин
+        main_page.open()
+        main_page.click_personal_account()
+        login_page.wait_for_page_loaded()
+        
+        assert login_page.is_current_page()

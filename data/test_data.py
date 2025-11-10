@@ -1,4 +1,5 @@
 class TestData:
+    # Test users
     VALID_USER = {
         "email": "test_user_215580@yandex.ru",
         "password": "TestPassword123", 

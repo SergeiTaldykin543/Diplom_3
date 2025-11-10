@@ -23,11 +23,7 @@ class LoginPage(BasePage):
     @allure.step("Кликнуть на кнопку входа")
     def click_login_button(self):
         self.wait_for_no_overlay()
-        
-        if "firefox" in self.get_browser_name():
-            self.click_js(AccountPageLocators.LOGIN_BUTTON)
-        else:
-            self.click(AccountPageLocators.LOGIN_BUTTON)
+        self.click(AccountPageLocators.LOGIN_BUTTON)
 
     @allure.step("Выполнить вход")
     def login(self, email, password):
